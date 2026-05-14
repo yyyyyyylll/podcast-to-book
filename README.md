@@ -69,15 +69,15 @@ npm run dev
 ## 成品预览
 
 <p>
-  <img src="frontend/public/ebook-showcase/screenshot-2.png" alt="书籍封面" width="30%">
-  <img src="frontend/public/ebook-showcase/screenshot-1.png" alt="目录页" width="30%">
-  <img src="frontend/public/ebook-showcase/screenshot-3.png" alt="精华提要" width="30%">
+  <img src="frontend/public/ebook-showcase/screenshot-1.png" alt="书籍封面" width="30%">
+  <img src="frontend/public/ebook-showcase/screenshot-2.png" alt="目录页" width="30%">
+  <img src="frontend/public/ebook-showcase/screenshot-3.png" alt="章节页" width="30%">
 </p>
 
 <p>
-  <img src="frontend/public/ebook-showcase/screenshot-4.png" alt="编者序" width="30%">
+  <img src="frontend/public/ebook-showcase/screenshot-4.png" alt="正文页" width="30%">
   <img src="frontend/public/ebook-showcase/screenshot-5.png" alt="正文页" width="30%">
-  <img src="frontend/public/ebook-showcase/screenshot-6.png" alt="图文正文页" width="30%">
+  <img src="frontend/public/ebook-showcase/screenshot-6.png" alt="正文页" width="30%">
 </p>
 
 ## 多期工作流（multi 工作台）
