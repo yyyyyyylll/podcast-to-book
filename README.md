@@ -2,15 +2,6 @@
 
 把播客变成一本可印刷的书。支持两种工作流：
 
-<p>
-  <img src="docs/screenshots/landing-hero.png" alt="podcast-to-book landing page" width="100%">
-</p>
-
-<p>
-  <img src="docs/screenshots/create-page.png" alt="Create a podcast book" width="49%">
-  <img src="docs/screenshots/sample-pdf-page.png" alt="Generated book PDF sample" width="32%">
-</p>
-
 - **单期播客 → 书**：上传一条小宇宙 / Apple Podcasts 链接，自动转录、整理、排版，导出 PDF / EPUB / DOCX
 - **多期播客 → 书**：把同一档播客的多期合并成一整本书（CLI 工作台，给运营/编辑使用）
 
@@ -75,6 +66,20 @@ npm run dev
 
 打开 http://localhost:5173
 
+## 成品预览
+
+<p>
+  <img src="frontend/public/ebook-showcase/screenshot-2.png" alt="书籍封面" width="30%">
+  <img src="frontend/public/ebook-showcase/screenshot-1.png" alt="目录页" width="30%">
+  <img src="frontend/public/ebook-showcase/screenshot-3.png" alt="精华提要" width="30%">
+</p>
+
+<p>
+  <img src="frontend/public/ebook-showcase/screenshot-4.png" alt="编者序" width="30%">
+  <img src="frontend/public/ebook-showcase/screenshot-5.png" alt="正文页" width="30%">
+  <img src="frontend/public/ebook-showcase/screenshot-6.png" alt="图文正文页" width="30%">
+</p>
+
 ## 多期工作流（multi 工作台）
 
 `backend/multi/` 是一套命令行工具，把多期播客的转录稿合并成一整本书。流程比 Web 版精细得多（人工干预每个节点的结果，再喂给下一节点）。
@@ -106,5 +111,3 @@ PYTHONPATH=. python -m multi.runners.run_pipeline --help
 
 - typst —— 排版引擎
 - LangGraph —— 工作流框架
-- 通义 / DeepSeek —— LLM + ASR
-- Noto / 思源 / EB Garamond / Inter —— 字体
