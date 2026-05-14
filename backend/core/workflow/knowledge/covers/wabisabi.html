@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&family=Noto+Sans+SC:wght@300;400&display=swap');
+body {
+  --safe-top: 62px;
+  --safe-right: 62px;
+  --safe-bottom: 62px;
+  --safe-left: 72px;
+  margin: 0; padding: 0; width: 528px; height: 741px;
+  background: #ece6db;
+  font-family: 'Noto Serif SC', serif;
+  position: relative; overflow: hidden;
+}
+.tex {
+  position: absolute; inset: 0; opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+.v-line {
+  position: absolute; left: 50%; top: var(--safe-top); bottom: var(--safe-bottom);
+  width: 1px; background: rgba(100,80,55,0.08);
+}
+.content {
+  position: relative; z-index: 2;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  height: 100%;
+  box-sizing: border-box;
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  overflow: hidden;
+}
+.title-area {
+  flex: 1; display: flex;
+  align-items: center; justify-content: center;
+}
+.title {
+  font-size: 48px; font-weight: 600; color: #33291f;
+  letter-spacing: 10px; writing-mode: vertical-rl;
+  text-orientation: upright;
+  line-height: 1.6;
+  margin: 0;
+  max-height: 360px; max-width: 160px;
+  overflow: hidden;
+}
+.subtitle {
+  font-size: 15px; font-weight: 400; color: #6b5c4c;
+  letter-spacing: 3px; margin-top: 0; margin-bottom: 18px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 100%; flex-shrink: 0;
+}
+.author-line {
+  font-size: 15px; color: #5a4c3e; letter-spacing: 4px;
+  line-height: 1.4; margin-bottom: 4px; flex-shrink: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 100%;
+}
+.tag {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 11px; color: #b5a593; letter-spacing: 3px; flex-shrink: 0;
+  margin-top: 10px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 100%;
+}
+</style>
+</head>
+<body>
+<div class="tex"></div>
+<div class="v-line"></div>
+<div class="content">
+  <div class="title-area">
+    <h1 class="title">{{title}}</h1>
+  </div>
+  {% if subtitle %}<div class="subtitle">{{subtitle}}</div>{% endif %}
+  <div class="author-line">{{author_line_1}}</div>
+  {% if author_line_2 %}<div class="author-line">{{author_line_2}}</div>{% endif %}
+  <div class="tag">{{series_label}}</div>
+</div>
+<script>
+document.fonts.ready.then(function(){
+  var t = document.querySelector('.title');
+  if (t) {
+    var cs = getComputedStyle(t);
+    var maxW = parseInt(cs.maxWidth);
+    t.style.maxWidth = 'none';
+    var ov = function(){ return t.offsetWidth > maxW; };
+    var ls = parseFloat(cs.letterSpacing) || 0;
+    while (ov() && ls > 2) {
+      ls -= 0.5;
+      t.style.letterSpacing = ls + 'px';
+    }
+    var fs = parseFloat(cs.fontSize);
+    while (ov() && fs > 24) {
+      fs -= 1;
+      t.style.fontSize = fs + 'px';
+    }
+    t.style.maxWidth = maxW + 'px';
+  }
+  document.querySelectorAll('.author-line, .tag').forEach(function(el){
+    var ls = parseFloat(getComputedStyle(el).letterSpacing) || 0;
+    while(el.scrollWidth > el.clientWidth && ls > 0){
+      ls = Math.max(0, ls - 0.5);
+      el.style.letterSpacing = ls + 'px';
+    }
+    var fs = parseFloat(getComputedStyle(el).fontSize);
+    while(el.scrollWidth > el.clientWidth && fs > 6){
+      fs -= 0.5;
+      el.style.fontSize = fs + 'px';
+    }
+  });
+
+  document.querySelectorAll('body *').forEach(function(el){
+    if(el.childElementCount > 0) return;
+    var ls = parseFloat(getComputedStyle(el).letterSpacing);
+    if(!(ls > 0)) return;
+    var n = (el.textContent || '').trim().length;
+    if(n > 1) el.style.letterSpacing = (ls * (n - 1) / n) + 'px';
+    else el.style.letterSpacing = '0px';
+  });
+});
+</script>
+</body>
+</html>

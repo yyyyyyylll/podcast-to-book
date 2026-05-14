@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;700;900&family=Noto+Sans+SC:wght@300;400&display=swap');
+body {
+  --safe-top: 62px;
+  --safe-right: 62px;
+  --safe-bottom: 62px;
+  --safe-left: 72px;
+  margin: 0; padding: 0; width: 528px; height: 741px;
+  background: #ebe7e0;
+  font-family: 'Noto Serif SC', serif;
+  position: relative; overflow: hidden;
+}
+.image-top {
+  position: absolute; top: 0; left: 0; right: 0; height: 512px;
+  overflow: hidden;
+  background: #e0ddd8;
+}
+.cover-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+.image-fallback {
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg, #ccc9c3 0%, #e0ddd8 100%);
+}
+.image-gradient {
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 240px;
+  background: linear-gradient(180deg, rgba(235,231,224,0) 0%, rgba(235,231,224,0.6) 50%, #ebe7e0 100%);
+  pointer-events: none;
+}
+.vtitle {
+  position: absolute;
+  right: var(--safe-right);
+  bottom: var(--safe-bottom);
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  white-space: nowrap;
+  font-size: 42px;
+  font-weight: 900;
+  color: #1a1a1a;
+  letter-spacing: 8px;
+  line-height: 1.6;
+  z-index: 10;
+  text-shadow:
+    0 0 24px rgba(235,231,224,0.9),
+    0 0 48px rgba(235,231,224,0.6);
+}
+.content-left {
+  position: absolute;
+  left: var(--safe-left);
+  bottom: var(--safe-bottom);
+  max-width: 248px;
+}
+.subtitle {
+  position: absolute;
+  left: var(--safe-left);
+  bottom: calc(var(--safe-bottom) + 94px);
+  font-size: 17px; font-weight: 300; color: #1a1a1a;
+  letter-spacing: 3px;
+  white-space: nowrap;
+  max-width: 280px;
+  overflow: hidden; text-overflow: ellipsis;
+  z-index: 10;
+  text-shadow:
+    0 0 20px rgba(235,231,224,0.9),
+    0 0 40px rgba(235,231,224,0.6);
+}
+.divider {
+  width: 36px; height: 1px;
+  background: #ccc;
+  margin-bottom: 14px;
+}
+.author-line {
+  font-size: 14px; color: #1a1a1a; letter-spacing: 3px;
+  line-height: 1.6;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 280px;
+}
+.series {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 11px; color: #888; letter-spacing: 2px;
+  margin-top: 12px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 280px;
+}
+</style>
+</head>
+<body>
+<div class="image-top">
+  {% if cover_image %}
+  <img class="cover-img" src="{{cover_image}}" />
+  {% else %}
+  <div class="image-fallback"></div>
+  {% endif %}
+  <div class="image-gradient"></div>
+</div>
+<div class="vtitle" id="vtitle">{{title | replace('\n', '')}}</div>
+{% if subtitle %}<div class="subtitle">{{subtitle}}</div>{% endif %}
+<div class="content-left">
+  <div class="author-line">{{author_line_1}}</div>
+  {% if author_line_2 %}<div class="author-line">{{author_line_2}}</div>{% endif %}
+  <div class="series">{{series_label}}</div>
+</div>
+<script>
+document.fonts.ready.then(function(){
+  var vt = document.getElementById('vtitle');
+  if (vt) {
+    var fs = parseFloat(getComputedStyle(vt).fontSize);
+    var ls = parseFloat(getComputedStyle(vt).letterSpacing);
+    var targetH = 420;
+    var natH = vt.offsetHeight;
+    var text = vt.textContent.trim();
+
+    if (natH <= targetH) {
+      while (vt.offsetHeight < targetH * 0.6 && fs < 62) {
+        var pf = fs, pl = ls;
+        fs += 2; ls = Math.min(14, ls + 1);
+        vt.style.fontSize = fs + 'px';
+        vt.style.letterSpacing = ls + 'px';
+        if (vt.offsetHeight > targetH) {
+          fs = pf; ls = pl;
+          vt.style.fontSize = fs + 'px';
+          vt.style.letterSpacing = ls + 'px';
+          break;
+        }
+      }
+    } else {
+      var mid = Math.ceil(text.length * 0.6);
+      vt.innerHTML = text.substring(0, mid) + '<br>' + text.substring(mid);
+      ls = 4;
+      vt.style.letterSpacing = ls + 'px';
+
+      while (vt.offsetHeight > targetH && fs > 28) {
+        fs -= 2;
+        vt.style.fontSize = fs + 'px';
+      }
+      while (vt.offsetHeight < targetH * 0.55 && fs < 48) {
+        fs += 2;
+        vt.style.fontSize = fs + 'px';
+      }
+      if (vt.offsetHeight > targetH) {
+        fs -= 2;
+        vt.style.fontSize = fs + 'px';
+      }
+    }
+  }
+
+  var seriesEl = document.querySelector('.series');
+  if (vt && seriesEl) {
+    var seriesBottom = seriesEl.getBoundingClientRect().bottom;
+    vt.style.bottom = Math.max(parseFloat(getComputedStyle(document.body).getPropertyValue('--safe-bottom')) || 62, 741 - seriesBottom) + 'px';
+  }
+
+  var st = document.querySelector('.subtitle');
+  if (vt && st) {
+    var gap = 16;
+    var vtLeft = vt.getBoundingClientRect().left;
+    var safeLeft = parseFloat(getComputedStyle(document.body).getPropertyValue('--safe-left')) || 72;
+    var mw = Math.max(100, vtLeft - safeLeft - gap);
+    st.style.maxWidth = mw + 'px';
+    var sfs = parseFloat(getComputedStyle(st).fontSize);
+    var sls = parseFloat(getComputedStyle(st).letterSpacing) || 0;
+    while (st.scrollWidth < mw * 0.92 && sfs < 36) {
+      sfs += 0.5;
+      sls = Math.min(6, sls + 0.3);
+      st.style.fontSize = sfs + 'px';
+      st.style.letterSpacing = sls + 'px';
+      if (st.scrollWidth > mw) {
+        sfs -= 0.5; sls = Math.max(0, sls - 0.3);
+        st.style.fontSize = sfs + 'px';
+        st.style.letterSpacing = sls + 'px';
+        break;
+      }
+    }
+    while (st.scrollWidth > st.clientWidth && sls > 0) {
+      sls = Math.max(0, sls - 0.5);
+      st.style.letterSpacing = sls + 'px';
+    }
+    while (st.scrollWidth > st.clientWidth && sfs > 10) {
+      sfs -= 0.5;
+      st.style.fontSize = sfs + 'px';
+    }
+  }
+
+  document.querySelectorAll('.author-line, .series, .subtitle').forEach(function(el){
+    var ls = parseFloat(getComputedStyle(el).letterSpacing) || 0;
+    while(el.scrollWidth > el.clientWidth && ls > 0){
+      ls = Math.max(0, ls - 0.5);
+      el.style.letterSpacing = ls + 'px';
+    }
+    var fs = parseFloat(getComputedStyle(el).fontSize);
+    while(el.scrollWidth > el.clientWidth && fs > 6){
+      fs -= 0.5;
+      el.style.fontSize = fs + 'px';
+    }
+  });
+
+  document.querySelectorAll('.content-left *').forEach(function(el){
+    if(el.childElementCount > 0) return;
+    var ls = parseFloat(getComputedStyle(el).letterSpacing);
+    if(!(ls > 0)) return;
+    var n = (el.textContent || '').trim().length;
+    if(n > 1) el.style.letterSpacing = (ls * (n - 1) / n) + 'px';
+    else el.style.letterSpacing = '0px';
+  });
+});
+</script>
+</body>
+</html>

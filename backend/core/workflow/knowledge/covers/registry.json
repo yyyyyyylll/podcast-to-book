@@ -1,0 +1,74 @@
+[
+  {
+    "id": "classic",
+    "name": "暖纸素笺",
+    "description": "暖纸质感 + 磨砂颗粒 + 播客封面渐隐融入",
+    "file": "classic.html",
+    "default_colors": {"primary": "#f4f1ea", "accent": "#8a6d3b"},
+    "preview": "classic_preview.jpg"
+  },
+  {
+    "id": "darklit",
+    "name": "四隅落墨",
+    "description": "暖米底色 + 大幅方正上图 + 四角排版文字",
+    "file": "darklit.html",
+    "default_colors": {"primary": "#f0ede8", "accent": "#1a1a1a"},
+    "preview": "darklit_preview.png"
+  },
+  {
+    "id": "circlemotif",
+    "name": "浓墨青野",
+    "description": "鲜绿色底 + 衬线大标题 + 中央圆形图窗 + 圆点副标题",
+    "file": "circlemotif.html",
+    "default_colors": {"primary": "#8DB55A", "accent": "#2B5E85"},
+    "preview": "circlemotif_preview.jpg"
+  },
+  {
+    "id": "halfcover",
+    "name": "叠影竖题",
+    "description": "上方大图渐变 + 竖排大标题跨越图文 + 左下作者信息",
+    "file": "halfcover.html",
+    "default_colors": {"primary": "#ebe7e0", "accent": "#1a1a1a"},
+    "preview": "halfcover_preview.png"
+  },
+  {
+    "id": "artdeco",
+    "name": "暮蓝鎏金",
+    "description": "深蓝金底 + 扇形拱顶纹饰 + 双线边框",
+    "file": "artdeco.html",
+    "default_colors": {"primary": "#181828", "accent": "#bea569"},
+    "preview": "artdeco_preview.jpg"
+  },
+  {
+    "id": "mono",
+    "name": "清影素裁",
+    "description": "正方形封面图 + 暖灰底 + 衬线大标题 + 极简分割",
+    "file": "mono.html",
+    "default_colors": {"primary": "#f5f3f0", "accent": "#1a1a1a"},
+    "preview": "mono_preview.png"
+  },
+  {
+    "id": "emboss",
+    "name": "浮雕留白",
+    "description": "大字底纹浮雕 + 竖排标题 + 红点缀 + 极简白",
+    "file": "emboss.html",
+    "default_colors": {"primary": "#f5f3f0", "accent": "#c0392b"},
+    "preview": "emboss_preview.jpg"
+  },
+  {
+    "id": "pastoral",
+    "name": "晚樱凝霞",
+    "description": "柔粉暖底 + 中央图片窗 + 大号作者名 + 边框",
+    "file": "pastoral.html",
+    "default_colors": {"primary": "#ec788a", "accent": "#3f2e28"},
+    "preview": "pastoral_preview.jpg"
+  },
+  {
+    "id": "wabisabi",
+    "name": "侘寂留白",
+    "description": "宣纸质感 + 竖排标题 + 大面积呼吸留白",
+    "file": "wabisabi.html",
+    "default_colors": {"primary": "#ece6db", "accent": "#33291f"},
+    "preview": "wabisabi_preview.jpg"
+  }
+]

@@ -1,0 +1,4 @@
+# 工作台运行产物（防御性双保险，根 .gitignore 已经忽略 storage/）
+jobs/
+*.log
+.cache/

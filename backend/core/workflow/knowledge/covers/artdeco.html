@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Cormorant+Garamond:wght@300;400&family=Crimson+Pro:ital,wght@0,300;1,300&display=swap');
+body {
+  --safe-top: 62px;
+  --safe-right: 62px;
+  --safe-bottom: 62px;
+  --safe-left: 72px;
+  margin: 0; padding: 0; width: 528px; height: 741px;
+  background: #181828;
+  font-family: 'Noto Serif SC', serif;
+  position: relative; overflow: hidden;
+}
+.bo {
+  position: absolute; top: 18px; left: 18px; right: 18px; bottom: 18px;
+  border: 1px solid rgba(190,165,105,0.18);
+}
+.bi {
+  position: absolute; top: 25px; left: 25px; right: 25px; bottom: 25px;
+  border: 1px solid rgba(190,165,105,0.09);
+}
+.fan-t {
+  position: absolute; top: 42px; left: 50%; transform: translateX(-50%);
+  width: 136px; height: 68px;
+  border-bottom: 2px solid rgba(190,165,105,0.22);
+  border-radius: 0 0 68px 68px;
+}
+.fan-b {
+  position: absolute; bottom: 42px; left: 50%; transform: translateX(-50%);
+  width: 136px; height: 68px;
+  border-top: 2px solid rgba(190,165,105,0.22);
+  border-radius: 68px 68px 0 0;
+}
+.ct { position: absolute; width: 34px; height: 34px; }
+.ct1 { top: 36px; left: 36px; border-top: 2px solid rgba(190,165,105,0.28); border-left: 2px solid rgba(190,165,105,0.28); }
+.ct2 { top: 36px; right: 36px; border-top: 2px solid rgba(190,165,105,0.28); border-right: 2px solid rgba(190,165,105,0.28); }
+.ct3 { bottom: 36px; left: 36px; border-bottom: 2px solid rgba(190,165,105,0.28); border-left: 2px solid rgba(190,165,105,0.28); }
+.ct4 { bottom: 36px; right: 36px; border-bottom: 2px solid rgba(190,165,105,0.28); border-right: 2px solid rgba(190,165,105,0.28); }
+.content {
+  position: relative; z-index: 2;
+  padding: calc(var(--safe-top) + 20px) calc(var(--safe-right) + 2px) calc(var(--safe-bottom) + 8px) calc(var(--safe-left) + 2px);
+  height: 100%;
+  box-sizing: border-box;
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  overflow: hidden;
+}
+.series {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 5px;
+  color: rgba(190,165,105,0.45);
+  text-transform: uppercase; margin-bottom: 48px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 100%;
+}
+.title {
+  font-size: 42px; font-weight: 900; color: #bea569;
+  line-height: 1.3; letter-spacing: 4px;
+  margin: 0 0 18px 0; white-space: pre-line;
+  overflow: hidden;
+  max-height: 210px;
+}
+.orn {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 20px; flex-shrink: 0;
+}
+.orn-l { width: 48px; height: 1px; background: rgba(190,165,105,0.22); }
+.orn-d { width: 5px; height: 5px; background: rgba(190,165,105,0.38); transform: rotate(45deg); }
+.subtitle {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px; font-weight: 400;
+  color: rgba(230,220,200,0.55);
+  letter-spacing: 1px; margin: 0;
+  overflow: hidden; display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.spacer { flex: 1; min-height: 16px; }
+.author-line {
+  font-size: 15px; color: rgba(230,220,200,0.6);
+  letter-spacing: 5px; line-height: 1.4; margin-bottom: 4px; flex-shrink: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 100%;
+}
+.edition {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px; color: rgba(190,165,105,0.25);
+  letter-spacing: 4px; text-transform: uppercase; flex-shrink: 0;
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+<div class="bo"></div><div class="bi"></div>
+<div class="fan-t"></div><div class="fan-b"></div>
+<div class="ct ct1"></div><div class="ct ct2"></div>
+<div class="ct ct3"></div><div class="ct ct4"></div>
+<div class="content">
+  <div class="series">{{series_label}}</div>
+  <h1 class="title">{{title}}</h1>
+  <div class="orn"><span class="orn-l"></span><span class="orn-d"></span><span class="orn-l"></span></div>
+  {% if subtitle %}<p class="subtitle">{{subtitle}}</p>{% endif %}
+  <div class="spacer"></div>
+  <div class="author-line">{{author_line_1}}</div>
+  {% if author_line_2 %}<div class="author-line">{{author_line_2}}</div>{% endif %}
+  <div class="edition">Collector's Edition</div>
+</div>
+<script>
+document.fonts.ready.then(function(){
+  var t = document.querySelector('.title');
+  if (t) {
+    var maxH = parseInt(getComputedStyle(t).maxHeight);
+    t.style.maxHeight = 'none';
+    var ls = parseFloat(getComputedStyle(t).letterSpacing) || 0;
+    while (t.offsetHeight > maxH && ls > 0) {
+      ls = Math.max(0, ls - 0.5);
+      t.style.letterSpacing = ls + 'px';
+    }
+    var fs = parseFloat(getComputedStyle(t).fontSize);
+    while (t.offsetHeight > maxH && fs > 24) {
+      fs -= 1;
+      t.style.fontSize = fs + 'px';
+    }
+    t.style.maxHeight = maxH + 'px';
+  }
+  document.querySelectorAll('.author-line, .series').forEach(function(el){
+    var ls = parseFloat(getComputedStyle(el).letterSpacing) || 0;
+    while(el.scrollWidth > el.clientWidth && ls > 0){
+      ls = Math.max(0, ls - 0.5);
+      el.style.letterSpacing = ls + 'px';
+    }
+    var fs = parseFloat(getComputedStyle(el).fontSize);
+    while(el.scrollWidth > el.clientWidth && fs > 6){
+      fs -= 0.5;
+      el.style.fontSize = fs + 'px';
+    }
+  });
+
+  document.querySelectorAll('body *').forEach(function(el){
+    if(el.childElementCount > 0) return;
+    var ls = parseFloat(getComputedStyle(el).letterSpacing);
+    if(!(ls > 0)) return;
+    var n = (el.textContent || '').trim().length;
+    if(n > 1) el.style.letterSpacing = (ls * (n - 1) / n) + 'px';
+    else el.style.letterSpacing = '0px';
+  });
+});
+</script>
+</body>
+</html>

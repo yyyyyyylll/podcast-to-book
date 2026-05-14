@@ -1,0 +1,73 @@
+[
+  {
+    "case_id": "podcast_test_1",
+    "score": 86.15,
+    "passed": false,
+    "scores": {
+      "writing_style": {
+        "score": 95,
+        "violations": [
+          "The writing style, while professional, is slightly verbose and loses some of the original's punch."
+        ],
+        "detail": "-5: 稿件文风统一、流畅，符合散文要求。但为了追求行文的“精炼”，部分地方 kehilangan 了嘉宾口语表达中更直接、更有感染力的能量，导致文章略显平淡，不够锐利。"
+      },
+      "content_accuracy": {
+        "score": 92,
+        "violations": [
+          "Minor mismatch in source segment attribution."
+        ],
+        "detail": "-8: 整体内容忠实于原文。但抽查发现，导读板块[introduction]引用的片段编号[42, 43]与正文内容的关联不够直接，正文是对更广泛内容的提炼，而非精确对应这两个片段中关于“勇敢”的讨论。这种来源标注的不够精准是一个小缺陷。"
+      },
+      "structure": {
+        "score": 90,
+        "violations": [
+          "Slightly abrupt transition between 'core_viewpoints' and 'execution_path'."
+        ],
+        "detail": "-10: 整体结构逻辑清晰，有叙事弧线。但从阐述核心理念（AI是同事）的[core_viewpoints]板块，到介绍具体方法论的[execution_path]板块，两者之间的过渡稍显生硬，缺少一个自然的承接，读起来有跳跃感。"
+      },
+      "title_quality": {
+        "score": 90,
+        "violations": [
+          "One or two titles are slightly clichéd or less impactful than others."
+        ],
+        "detail": "-10: 大部分标题质量很高。但导读标题《当所有人都向东，他为何选择向西？》是一个比较常见的 journalistic trope，略显陈旧。标题质量虽好，但未达到全部都新颖且精准的完美标准。"
+      },
+      "deduplication": {
+        "score": 92,
+        "violations": [
+          "Slightly overlapping premises for different sections."
+        ],
+        "detail": "-8: 稿件没有出现大段内容的重复。但“模型能力已到临界点，但应用转化存在巨大鸿沟”这一核心诊断，既是[decision_logic]板块的立论基础，也是[execution_path]板块的立论基础。虽然切入角度不同，但底层逻辑的重合使得阅读时有轻微的重复感。"
+      },
+      "completeness": {
+        "score": 65,
+        "violations": [
+          "A core methodology concept, 'Commercial Reinforcement Learning', is missing.",
+          "The vivid contrast in fundraising experiences is significantly weakened."
+        ],
+        "detail": "-15: 遗漏了嘉宾为自己公司方法论创造的核心术语“商业强化学习”[83, 84, 85]。这是其方案区别于其他公司的关键，缺少了这个概念，[execution_path]板块的论述显得不够独特和深入。\n-10: 遗漏了嘉宾关于“个人能力在‘大势’面前不重要”[39]这一观点的生动案例对比（14年融资vs22年融资），使得这一深刻领悟的说服力大打折扣。\n-10: 未提及对SaaS在中美市场表现差异的探讨[64, 67]，这部分内容对于理解“AI是同事”这一论断的背景至关重要。"
+      },
+      "balance": {
+        "score": 90,
+        "violations": [
+          "The word count distribution is numerically balanced but does not reflect the varying importance of the content."
+        ],
+        "detail": "-10: 各板块字数均在规范范围内，分布均衡。但从内容权重看，作为全文核心的[core_viewpoints]和[execution_path]板块，其篇幅与其他故事性、背景性板块几乎相同，未能通过篇幅来凸显核心内容的重要性。这是一种“形式上的均衡”掩盖了“内容上的不均衡”。"
+      }
+    },
+    "issues": [
+      "最严重的问题是内容完整性不足，遗漏了嘉宾提出的核心方法论“商业强化学习”，这使得对其创业项目核心竞争力的介绍变得模糊不清。",
+      "未能充分展现嘉宾关于“大势”与个人能力关系的关键论据（两次创业融资的鲜明对比），削弱了其核心决策逻辑的说服力。",
+      "稿件整体质量不错，但由于核心信息的缺失，无法构成一篇完整的、能准确反映嘉宾思想的独立作品。"
+    ],
+    "suggestions": [
+      "必须重写[execution_path]板块，明确引入并阐释“商业强化学习”的概念、原理及其重要性，这是稿件能否通过的决定性修改。",
+      "在[decision_logic]板块中，补充或强化关于两次创业融资经历的对比细节，使“顺势而为”的观点更有血有肉。",
+      "审阅全文，适当增加一些嘉宾原文中更具个性和冲击力的口语化表达，以增强文章的感染力和可读性。"
+    ],
+    "prompt_hints": [
+      "在生成指令中，可以增加一个后处理检查步骤，要求模型列出原文中出现频率高、且由嘉宾明确定义的核心概念（如“商业强化学习”、“模型含量”、“模型性”等），并自查是否在重组结果中有充分体现和解释。",
+      "可以要求模型在“内容完整性”方面，不仅要覆盖核心观点，还要特别保留那些能支撑观点的、具有强烈对比性或戏剧性的个人故事和案例。"
+    ]
+  }
+]

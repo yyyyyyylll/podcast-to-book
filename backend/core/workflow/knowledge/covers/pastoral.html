@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@500;700;900&display=swap');
+body {
+  --safe-top: 62px;
+  --safe-right: 62px;
+  --safe-bottom: 62px;
+  --safe-left: 72px;
+  margin: 0; padding: 0; width: 528px; height: 741px;
+  background: #ec788a;
+  font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+  position: relative; overflow: hidden;
+}
+.content {
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  height: 100%; box-sizing: border-box;
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  overflow: hidden;
+}
+
+.title {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-size: 64px; font-weight: 500; color: #3f2e28;
+  line-height: 1.2; letter-spacing: 0.06em;
+  margin: 0 0 12px 0; white-space: nowrap;
+  width: 100%; overflow: hidden;
+}
+.podcast-name {
+  font-size: 21px; font-weight: 500;
+  color: #f0ccc4;
+  letter-spacing: 4px; margin: 0 0 7px 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 100%;
+}
+.credits {
+  font-size: 12px; font-weight: 400;
+  color: #e8b5b0;
+  letter-spacing: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.image-window {
+  width: 232px; height: 232px;
+  overflow: hidden; flex-shrink: 0;
+  background: rgba(255,255,255,0.15);
+  position: relative;
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+.image-window::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  box-shadow: inset 0 0 18px 6px rgba(0,0,0,0.25);
+  pointer-events: none;
+}
+.cover-img {
+  width: 100%; height: 100%;
+  object-fit: contain; display: block;
+}
+.image-fallback {
+  width: 100%; height: 100%;
+  background: rgba(255,255,255,0.08);
+}
+
+.subtitle {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-size: 26px; font-weight: 500; color: #2a2a2a;
+  letter-spacing: 4px; line-height: 1.2;
+  margin: 0 0 14px 0;
+  white-space: pre-line; overflow: hidden;
+  width: 100%; flex-shrink: 0;
+}
+.series {
+  font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+  font-size: 11px; font-weight: 400;
+  color: #e8b5b0;
+  letter-spacing: 5px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 100%; flex-shrink: 0;
+  margin-top: auto;
+}
+</style>
+</head>
+<body>
+<div class="content">
+  <h1 class="title">{{title}}</h1>
+  {% if author_line_1 %}<div class="podcast-name">{{author_line_1}}</div>{% endif %}
+  {% if author_line_2 %}<div class="credits">{{ author_line_2 | replace('/', ' / ') | replace('  / ', ' / ') }}</div>{% endif %}
+  <div class="image-window">
+    {% if cover_image %}
+    <img class="cover-img" src="{{cover_image}}" />
+    {% else %}
+    <div class="image-fallback"></div>
+    {% endif %}
+  </div>
+  {% if subtitle %}<div class="subtitle" id="subtitle">{{subtitle}}</div>{% endif %}
+  <div class="series">{{series_label}}</div>
+</div>
+<script>
+document.fonts.ready.then(function(){
+  function makeSpan(font, ls, text) {
+    var s = document.createElement('span');
+    s.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font:' + font + ';letter-spacing:' + ls;
+    s.textContent = text;
+    document.body.appendChild(s);
+    return s;
+  }
+  function measureTextW(el) {
+    var s = getComputedStyle(el);
+    var sp = makeSpan(s.font, s.letterSpacing, el.textContent);
+    var w = sp.offsetWidth;
+    document.body.removeChild(sp);
+    return w;
+  }
+
+  var t = document.querySelector('.title');
+    var containerW = t ? t.parentElement.clientWidth : 394;
+  if (t) {
+    var fs = 80;
+    t.style.fontSize = fs + 'px';
+    while (t.scrollWidth > t.clientWidth && fs > 12) {
+      fs--;
+      t.style.fontSize = fs + 'px';
+    }
+  }
+
+  var sub = document.getElementById('subtitle');
+  if (sub) {
+    var txt = sub.textContent.trim();
+    var isSplit = false;
+    if (txt.length >= 4) {
+      var splitAt = Math.floor(txt.length * 0.4);
+      var isCJK = function(c){ return /[\u4e00-\u9fff\u3400-\u4dbf]/.test(c); };
+      var best = splitAt;
+      for (var d = 0; d <= 3; d++) {
+        var pos = [splitAt + d, splitAt - d];
+        for (var j = 0; j < pos.length; j++) {
+          var p = pos[j];
+          if (p > 0 && p < txt.length && isCJK(txt[p-1]) !== isCJK(txt[p])) {
+            best = p; d = 99; break;
+          }
+        }
+      }
+      var line1 = txt.slice(0, best);
+      var line2 = txt.slice(best);
+      sub.innerHTML = '<div id="sub-line1" style="font-size:0.65em">' + line1 + '</div><div id="sub-line2" style="white-space:nowrap">' + line2 + '</div>';
+      isSplit = true;
+    }
+
+    var line2El = document.getElementById('sub-line2');
+    var fs = 68;
+    sub.style.fontSize = fs + 'px';
+
+    if (isSplit && line2El) {
+      while (line2El.scrollWidth > line2El.clientWidth && fs > 16) {
+        fs--;
+        sub.style.fontSize = fs + 'px';
+      }
+    } else {
+      if (fs > 48) { fs = 48; sub.style.fontSize = fs + 'px'; }
+      sub.style.whiteSpace = 'nowrap';
+      while (sub.scrollWidth > sub.clientWidth && fs > 16) {
+        fs--;
+        sub.style.fontSize = fs + 'px';
+      }
+      sub.style.whiteSpace = '';
+    }
+  }
+
+  document.querySelectorAll('.podcast-name, .credits, .series').forEach(function(el){
+    var maxW = el.clientWidth || containerW * 0.8;
+    var ls = parseFloat(getComputedStyle(el).letterSpacing) || 0;
+    while(measureTextW(el) > maxW && ls > 0){
+      ls = Math.max(0, ls - 0.5); el.style.letterSpacing = ls + 'px';
+    }
+    var fs = parseFloat(getComputedStyle(el).fontSize);
+    while(measureTextW(el) > maxW && fs > 6){
+      fs -= 0.5; el.style.fontSize = fs + 'px';
+    }
+  });
+
+  document.querySelectorAll('body *').forEach(function(el){
+    if(el.childElementCount > 0) return;
+    var s = getComputedStyle(el);
+    if (s.whiteSpace === 'pre-line') return;
+    var ls = parseFloat(s.letterSpacing);
+    if(!(ls > 0)) return;
+    var n = (el.textContent || '').trim().length;
+    if(n > 1) el.style.letterSpacing = (ls * (n - 1) / n) + 'px';
+    else el.style.letterSpacing = '0px';
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: podbook
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+
+  podbook:
+    # 镜像名从环境变量 PODBOOK_IMAGE 读取。
+    # - 生产服务器 .env 里设置 PODBOOK_IMAGE=ccr.ccs.tencentyun.com/<namespace>/podbook:latest
+    #   然后 docker compose pull 会从 TCR 拉镜像。
+    # - 本地开发未设置时 fallback 到 pod_to_book-podbook:local，
+    #   docker compose build 会把镜像打成这个名字。
+    image: ${PODBOOK_IMAGE:-pod_to_book-podbook:local}
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./storage:/app/storage
+      - ./.env:/app/.env
+      - ./keys:/app/keys
+    environment:
+      - APP_ENV=production
+      - DEBUG=false
+      - STORAGE_DIR=/app/storage
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/podbook
+    restart: unless-stopped
+
+volumes:
+  pgdata:

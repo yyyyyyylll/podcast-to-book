@@ -1,0 +1,213 @@
+{
+  "_note": "示例输出：对应 examples/input_example.json（10 期、节目名「（示例）褶皱里」）。这份 final_json 同时包含 LLM 主诊断结果 + parser.merge_qc() 注入的 quality_check + runner 注入的 metadata + contact.extract_contact_info() 注入的 contact_info（节目名 / 主播 / 订阅数 / 微信号），是落到 jobs/<job_id>/direction_diagnosis.json 的最终形态。",
+  "overall_diagnosis": {
+    "podcast_name": "（示例）褶皱里",
+    "overall_content_judgment": "这档播客整体以阅读为入口，持续讨论女性如何在关系、职业、家庭与自我之间找到自己的位置。两位主播没有走议程式访谈，而是把读书的体验拉回到具体经验里来讲，让书与生活互相印证。整体气质克制、有反思密度，是一档以女性自我理解为主线、阅读与亲密关系为支撑分支的播客。",
+    "content_structure_type": "主方向清晰但有若干分支型",
+    "main_directions": [
+      "女性自我理解",
+      "阅读体验",
+      "亲密关系与友谊",
+      "工作与职业选择",
+      "身体与日常"
+    ],
+    "diagnosis_reason": "10 期节目里有 4 期直接以书为入口（《看不见的女性》《始于极限》《房思琪的初恋乐园》《一间自己的房间》），且每本书都被拉回到女性自身经验来讲；其余 6 期虽不直接讨论书，但议题（边界、职业证明、原生家庭、身体、职业转向）都从女性视角切入，主线清晰。",
+    "internal_note": "节目数偏少（10 期），结构判断有较强基础但仍需观察后续期数；'身体与日常'方向只有 1 集直接对应，证据偏单薄。"
+  },
+  "direction_structure": {
+    "structure_type": "主方向清晰但有若干分支型",
+    "directions": [
+      {
+        "direction_name": "女性自我理解",
+        "direction_description": "贯穿全档的主线。从女性视角观察自我、关系、职业角色，强调主体意识与日常经验的连接，不走宏大女性主义理论。",
+        "sub_topics": [
+          "主体性与自我证明",
+          "公共/私人空间的女性经验",
+          "代际女性张力",
+          "女性身体经验"
+        ],
+        "episode_evidence": [
+          "聊聊《看不见的女性》：那些被默认掉的日常",
+          "上野千鹤子《始于极限》读后感",
+          "工作中的自我证明：从拧巴到松弛",
+          "重读《房思琪的初恋乐园》"
+        ],
+        "editing_value": "高"
+      },
+      {
+        "direction_name": "阅读体验",
+        "direction_description": "几乎一半节目以一本书为入口展开。主播不走学术解读路径，而是把书里的概念拉回到具体经验里来讲，让书和生活互相印证。",
+        "sub_topics": [
+          "女性主义经典阅读",
+          "心理与关系类阅读",
+          "重读 vs 初读的不同感受"
+        ],
+        "episode_evidence": [
+          "聊聊《看不见的女性》：那些被默认掉的日常",
+          "上野千鹤子《始于极限》读后感",
+          "重读《房思琪的初恋乐园》",
+          "聊聊《一间自己的房间》"
+        ],
+        "editing_value": "高"
+      },
+      {
+        "direction_name": "亲密关系与友谊",
+        "direction_description": "出现频率中等，更偏个人经验分享而非系统讨论。两位主播倾向用自身关系做案例，谈边界、距离、原生家庭等。",
+        "sub_topics": [
+          "关系中的边界",
+          "友谊在不同人生阶段的变化",
+          "原生家庭的影响与边界"
+        ],
+        "episode_evidence": [
+          "亲密关系里的边界：靠近和后退的尺度",
+          "三十岁前后的友谊：留下来的人和走开的人",
+          "原生家庭这个词被滥用了吗"
+        ],
+        "editing_value": "中"
+      },
+      {
+        "direction_name": "工作与职业选择",
+        "direction_description": "出现 2 期，集中讨论职场中的自我证明与职业转向。和'女性自我理解'有重叠，但更具体到职业场景。",
+        "sub_topics": [
+          "职场自我证明",
+          "职业转向的判断与代价",
+          "工作环境与放下'证明姿态'"
+        ],
+        "episode_evidence": [
+          "工作中的自我证明：从拧巴到松弛",
+          "选择与代价：聊聊我们的职业转向"
+        ],
+        "editing_value": "中"
+      },
+      {
+        "direction_name": "身体与日常",
+        "direction_description": "出现频次较低，但是节目气质的重要支撑。包含生育、月经等身体议题与日常生活反思，给整档节目提供日常底色。",
+        "sub_topics": [
+          "身体经验的诚实",
+          "生育与月经议题",
+          "原生家庭话语的反思"
+        ],
+        "episode_evidence": [
+          "关于身体的诚实：从生育到月经",
+          "原生家庭这个词被滥用了吗"
+        ],
+        "editing_value": "低"
+      }
+    ],
+    "priority_direction": "女性自我理解",
+    "priority_reason": "这一方向能同时承接节目里的阅读经验、关系讨论、职业反思和身体议题，比单纯整理成'读书分享'更能体现节目气质，也更适合作为主题样册或电子书初稿的总体主线。",
+    "not_priority_direction": "身体与日常",
+    "not_priority_reason": "证据只有 1 集，作为主线整理会显得'撑不起来'。但作为附录或穿插的'章间小节'反而合适。"
+  },
+  "title_suggestions": {
+    "professional_titles": [
+      {
+        "title": "《女性自我理解的褶皱里》",
+        "reason": "克制、专业，呼应节目名'褶皱里'，能直接对应主线方向"
+      },
+      {
+        "title": "《阅读、关系与女性自我》",
+        "reason": "三个名词并列，覆盖播客的三个支柱方向"
+      }
+    ],
+    "literary_titles": [
+      {
+        "title": "《在书与生活之间长出自己》",
+        "reason": "贴合'阅读与生活互相印证'的节目调性，避免直白说'女性'但内核是女性视角"
+      },
+      {
+        "title": "《那些被默认掉的日常》",
+        "reason": "直接化用第一期标题，文艺且有节目痕迹"
+      }
+    ],
+    "clear_titles": [
+      {
+        "title": "《关于女性自我理解与日常选择的内容整理》",
+        "reason": "白描功能型，适合内部沟通、PR 介绍或客户售前材料"
+      },
+      {
+        "title": "《从阅读到自我：节目内容路径》",
+        "reason": "明确把整理路径说清楚（阅读为入口、自我为落点）"
+      }
+    ]
+  },
+  "customer_diagnosis": {
+    "diagnosis_text": "从整体内容来看，这档播客并不只是单纯的读书分享，而是借由阅读、亲密关系和职业经验，持续延伸到女性如何理解自我。它的内容结构属于'主方向清晰但有若干分支'的类型：阅读是入口，关系和职业是连接点，而女性自我理解是更适合被沉淀的核心方向。后续如果继续整理，不建议把所有话题都平均展开，而是可以优先围绕'女性自我理解'这个方向，细分出主体性、公共空间经验、代际张力、身体经验等子主题。这样会比单纯按节目顺序整理更有聚合感，也更容易形成一份有阅读路径的主题内容。",
+    "recommended_direction": "女性自我理解",
+    "recommended_sub_topics": [
+      "主体性与自我证明",
+      "公共/私人空间的女性经验",
+      "代际女性张力",
+      "女性身体经验"
+    ],
+    "main_risk": "女性自我理解、亲密关系、工作三个方向边界容易模糊，整理时需要明确每一节'是借这个场景看自己'还是'在讨论场景本身'，否则方向会互相吃掉对方的篇幅。"
+  },
+  "metadata": {
+    "tool_name": "EchoPress 整档播客内容方向诊断工具",
+    "version": "v1.0",
+    "input_type": "podcast_text_material",
+    "_run_id": "20260429-143052",
+    "_built_at": "2026-04-29T14:30:52",
+    "_llm_diagnosis_model": "gemini-3-flash-preview",
+    "_llm_diagnosis_premium": false,
+    "_llm_diagnosis_temperature": 0.4,
+    "_llm_diagnosis_elapsed_seconds": 16.2,
+    "_llm_qc_model": "gemini-3-flash-preview",
+    "_llm_qc_premium": false,
+    "_llm_qc_temperature": 0.3,
+    "_llm_qc_elapsed_seconds": 6.4,
+    "_qc_skipped": false,
+    "_input_episode_count": 10,
+    "_input_total_chars": 789,
+    "_input_sampled": false,
+    "_input_per_episode_cap": 400,
+    "_warnings_count": 0,
+    "_contact_warnings_count": 0,
+    "_note": "首次基线"
+  },
+  "quality_check": {
+    "warnings": [],
+    "rule_errors_count": 0,
+    "rule_warnings_count": 0,
+    "ai_warnings_count": 0,
+    "ai_confidence": "高",
+    "ai_review_summary": "诊断扎实，方向清晰且证据充分，无明显凭空或拔高",
+    "rule_confidence": "高",
+    "confidence_level": "高",
+    "manual_review_needed": false
+  },
+  "contact_info": {
+    "podcast_name": "（示例）褶皱里",
+    "host_names": ["小柒", "阿青"],
+    "primary_host": "小柒",
+    "subscription_count": 18420,
+    "wechat_personal_id": "zhezhouli_echo",
+    "wechat_personal_id_candidates": ["zhezhouli_echo"],
+    "wechat_official_account": "褶皱里PleatedTimes",
+    "structured_contacts": [
+      {
+        "type": "weixin",
+        "name": "褶皱里PleatedTimes",
+        "url": "",
+        "note": "订阅公众号",
+        "source": "sdk"
+      },
+      {
+        "type": "xiaohongshu",
+        "name": "褶皱里小柒",
+        "url": "",
+        "note": "小红书",
+        "source": "description"
+      },
+      {
+        "type": "weixin",
+        "name": "zhezhouli_echo",
+        "url": "",
+        "note": "合作微信",
+        "source": "description"
+      }
+    ],
+    "raw_contact_text": "/微信公众号：褶皱里PleatedTimes\n/小红书：褶皱里小柒\n/合作微信：zhezhouli_echo",
+    "extraction_warnings": []
+  }
+}

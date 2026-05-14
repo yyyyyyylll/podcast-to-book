@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;700&display=swap');
+body {
+  --safe-top: 62px;
+  --safe-right: 62px;
+  --safe-bottom: 62px;
+  --safe-left: 72px;
+  margin: 0; padding: 0; width: 528px; height: 741px;
+  background: #f5f3f0;
+  font-family: 'Noto Serif SC', serif;
+  position: relative; overflow: hidden;
+}
+body::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0;
+}
+.side-clip {
+  position: absolute;
+  top: 0; height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.side-clip-left { left: 0; }
+.side-clip-right { right: 0; }
+.side-text {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) scaleX(1.6);
+  font-weight: 700;
+  color: rgba(0,0,0,0.045);
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 4px;
+  line-height: 1;
+  white-space: nowrap;
+}
+.side-clip-left .side-text { right: 0; transform-origin: right center; }
+.side-clip-right .side-text { left: 0; transform-origin: left center; }
+.content {
+  position: relative; z-index: 2;
+  width: 100%; height: 100%;
+  box-sizing: border-box;
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding: var(--safe-top) calc(var(--safe-right) + 10px) var(--safe-bottom) calc(var(--safe-left) + 10px);
+  overflow: hidden;
+}
+.upper-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 0;
+  overflow: hidden;
+}
+.title-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+.title-stack.two-col {
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+}
+.title-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.title-char {
+  font-size: 34px;
+  font-weight: 700;
+  color: #2a2a2a;
+  line-height: 1;
+  padding: 6px 0;
+}
+.title-sep {
+  width: 26px;
+  height: 0;
+  border-top: 2px solid #2a2a2a;
+}
+.seal {
+  width: 30px; height: 30px;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+.subtitle-vert {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-size: 13px;
+  font-weight: 300;
+  color: #444;
+  letter-spacing: 3px;
+  line-height: 1.8;
+  max-height: 220px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+.bottom-info {
+  flex-shrink: 0;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+}
+.author-line {
+  font-size: 12px; color: #555; letter-spacing: 4px;
+  line-height: 1.6;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 300px;
+}
+.tag {
+  font-size: 10px; color: #bbb; letter-spacing: 3px;
+  margin-top: 6px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 300px;
+}
+</style>
+</head>
+<body>
+<div class="side-clip side-clip-left" id="clipLeft">
+  <div class="side-text" id="sideLeft">{{title}}</div>
+</div>
+<div class="side-clip side-clip-right" id="clipRight">
+  <div class="side-text" id="sideRight">{{title}}</div>
+</div>
+<div class="content">
+  <div class="upper-area">
+    <div class="title-stack" id="titleStack"></div>
+    <div class="seal"><svg viewBox="0 0 200 200" width="30" height="30" xmlns="http://www.w3.org/2000/svg"><path d="M18,12 C25,10 45,14 70,11 C95,8 120,13 150,11 C165,10 178,12 188,18 C190,45 187,75 189,100 C191,125 188,155 190,180 C185,188 175,190 155,189 C130,191 100,187 75,190 C50,192 30,188 18,190 C11,185 10,170 12,145 C14,120 11,95 12,70 C13,45 10,25 18,12 Z" fill="#b5302a"/><path d="M35,28 C55,26 85,30 110,27 C135,25 160,29 172,30 C174,55 172,85 173,110 C174,135 172,160 172,172 C155,174 130,171 105,173 C80,175 55,172 35,173 C28,165 30,140 29,115 C28,90 30,60 28,35 Z" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="3"/></svg></div>
+    {% if subtitle %}<div class="subtitle-vert" id="subtitleVert">{{subtitle}}</div>{% endif %}
+  </div>
+  <div class="bottom-info">
+    <div class="author-line">{{author_line_1}}</div>
+    {% if author_line_2 %}<div class="author-line">{{author_line_2}}</div>{% endif %}
+    <div class="tag">{{series_label}}</div>
+  </div>
+</div>
+<span id="rawTitle" style="display:none">{{title}}</span>
+<script>
+document.fonts.ready.then(function(){
+  var raw = document.getElementById('rawTitle').textContent.trim().replace(/[\s\n]+/g, '');
+  var chars = raw.split('');
+  var n = chars.length;
+
+  document.querySelectorAll('.side-text').forEach(function(el){
+    el.textContent = raw;
+  });
+
+  var stack = document.getElementById('titleStack');
+  stack.innerHTML = '';
+  var MAX_SINGLE = 8;
+
+  function buildTitleCol(arr, fontSize, pad, sepW) {
+    var col = document.createElement('div');
+    col.className = 'title-col';
+    var ts = document.createElement('div');
+    ts.className = 'title-sep';
+    if (sepW) ts.style.width = sepW + 'px';
+    col.appendChild(ts);
+    arr.forEach(function(c) {
+      var ch = document.createElement('div');
+      ch.className = 'title-char';
+      if (fontSize) {
+        ch.style.fontSize = fontSize + 'px';
+        ch.style.padding = pad + 'px 0';
+      }
+      ch.textContent = c;
+      col.appendChild(ch);
+      var s = document.createElement('div');
+      s.className = 'title-sep';
+      if (sepW) s.style.width = sepW + 'px';
+      col.appendChild(s);
+    });
+    return col;
+  }
+
+  if (n > MAX_SINGLE) {
+    stack.classList.add('two-col');
+    var mid = Math.ceil(n / 2);
+    var firstHalf = chars.slice(0, mid);
+    var secondHalf = chars.slice(mid);
+    var colLen = Math.max(firstHalf.length, secondHalf.length);
+    var cfs, cpd, csw;
+    if (colLen <= 5) { cfs = 30; cpd = 5; csw = 22; }
+    else if (colLen <= 7) { cfs = 26; cpd = 4; csw = 20; }
+    else if (colLen <= 10) { cfs = 22; cpd = 3; csw = 17; }
+    else { cfs = 18; cpd = 2; csw = 14; }
+    stack.appendChild(buildTitleCol(secondHalf, cfs, cpd, csw));
+    stack.appendChild(buildTitleCol(firstHalf, cfs, cpd, csw));
+  } else {
+    var topSep = document.createElement('div');
+    topSep.className = 'title-sep';
+    stack.appendChild(topSep);
+    chars.forEach(function(c) {
+      var ch = document.createElement('div');
+      ch.className = 'title-char';
+      ch.textContent = c;
+      stack.appendChild(ch);
+      var sep = document.createElement('div');
+      sep.className = 'title-sep';
+      stack.appendChild(sep);
+    });
+  }
+
+  if (n > 0) {
+    var available = 741;
+    var ls = 4;
+    var fs = Math.min(300, Math.floor((available - (n - 1) * ls) / n));
+    fs = Math.max(60, fs);
+    document.querySelectorAll('.side-text').forEach(function(el){
+      el.style.fontSize = fs + 'px';
+    });
+    var clipW = Math.round(fs * 0.82); // Since scaled by 1.6, half is 0.8
+    document.getElementById('clipLeft').style.width = clipW + 'px';
+    document.getElementById('clipRight').style.width = clipW + 'px';
+  }
+
+  var sv = document.getElementById('subtitleVert');
+  var upperEl = document.querySelector('.upper-area');
+  var upperH = upperEl.clientHeight;
+  var titleH = stack.getBoundingClientRect().height;
+  var sealH = 46;
+  var margins = 52;
+  if (sv) {
+    sv.textContent = sv.textContent.trim().replace(/[\s\n]+/g, '');
+    var avail = upperH - titleH - sealH - margins;
+    var maxSub = Math.min(260, Math.max(60, avail));
+    sv.style.maxHeight = '9999px';
+    var fullH = sv.scrollHeight;
+    if (fullH > maxSub) {
+      var cols = Math.ceil(fullH / maxSub);
+      maxSub = Math.ceil(fullH / cols) + 4;
+    }
+    sv.style.maxHeight = maxSub + 'px';
+    var contentH = titleH + 16 + 30 + 16 + Math.min(maxSub, sv.scrollHeight) + 20;
+    var pad = Math.max(0, Math.floor((upperH - contentH) / 2));
+    upperEl.style.paddingTop = pad + 'px';
+  } else {
+    var contentH = titleH + 16 + 30 + 16;
+    var pad = Math.max(0, Math.floor((upperH - contentH) / 2));
+    upperEl.style.paddingTop = pad + 'px';
+  }
+
+  document.querySelectorAll('.author-line, .tag').forEach(function(el){
+    var ls = parseFloat(getComputedStyle(el).letterSpacing) || 0;
+    while(el.scrollWidth > el.clientWidth && ls > 0){
+      ls = Math.max(0, ls - 0.5);
+      el.style.letterSpacing = ls + 'px';
+    }
+    var fs = parseFloat(getComputedStyle(el).fontSize);
+    while(el.scrollWidth > el.clientWidth && fs > 6){
+      fs -= 0.5;
+      el.style.fontSize = fs + 'px';
+    }
+  });
+
+  document.querySelectorAll('.content *').forEach(function(el){
+    if(el.childElementCount > 0) return;
+    var ls = parseFloat(getComputedStyle(el).letterSpacing);
+    if(!(ls > 0)) return;
+    var cn = (el.textContent || '').trim().length;
+    if(cn > 1) el.style.letterSpacing = (ls * (cn - 1) / cn) + 'px';
+    else el.style.letterSpacing = '0px';
+  });
+});
+</script>
+</body>
+</html>

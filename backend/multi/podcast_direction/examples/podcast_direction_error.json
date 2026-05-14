@@ -1,0 +1,8 @@
+{
+  "tool": "podcast_direction",
+  "run_id": "20260507-204231",
+  "stage": "llm_diagnosis",
+  "error_type": "TimeoutError",
+  "error_message": "LLM 调用超时: model=deepseek-v4-flash, timeout=180s",
+  "_failed_at": "2026-05-07T20:45:34"
+}

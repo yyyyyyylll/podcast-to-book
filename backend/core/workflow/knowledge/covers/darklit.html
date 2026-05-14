@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&display=swap');
+body {
+  --safe-top: 62px;
+  --safe-right: 62px;
+  --safe-bottom: 62px;
+  --safe-left: 72px;
+  margin: 0; padding: 0; width: 528px; height: 741px;
+  background: #f0ede8;
+  font-family: 'Noto Serif SC', serif;
+  position: relative; overflow: hidden;
+}
+.image-wrap {
+  position: absolute; top: var(--safe-top); left: var(--safe-left); right: var(--safe-right);
+  height: 414px;
+}
+.image-area {
+  width: 100%; height: 100%; overflow: hidden;
+}
+.cover-img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  filter: none;
+}
+.image-fallback {
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg, #222 0%, #111 60%, #0a0a0a 100%);
+}
+.bottom {
+  position: absolute;
+  left: var(--safe-left);
+  right: var(--safe-right);
+  bottom: var(--safe-bottom);
+  height: 190px;
+  box-sizing: border-box;
+}
+.title {
+  position: absolute; top: 0; left: 0;
+  font-size: 38px; font-weight: 900; color: #1a1a1a;
+  line-height: 1.25; letter-spacing: 3px;
+  margin: 0; white-space: pre-line;
+  overflow: hidden;
+  max-height: 116px; max-width: 64%;
+}
+.authors-vertical {
+  position: absolute; top: 0; right: 0;
+  display: flex; gap: 12px;
+  align-items: flex-start;
+}
+.author-col {
+  writing-mode: vertical-rl;
+  font-size: 11px; color: #1a1a1a;
+  letter-spacing: 2px; line-height: 1.4;
+  white-space: nowrap;
+}
+.bottom-row {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.subtitle {
+  font-size: 17px; font-weight: 400;
+  color: #1a1a1a;
+  letter-spacing: 2px; margin: 0;
+  line-height: 1.5; max-width: 65%;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.series {
+  font-size: 8px; letter-spacing: 1.5px;
+  color: #1a1a1a;
+  white-space: nowrap; margin-bottom: 3px;
+  max-width: 42%; overflow: hidden; text-overflow: ellipsis;
+  text-align: right;
+}
+</style>
+</head>
+<body>
+<div class="image-wrap">
+  <div class="image-area">
+    {% if cover_image %}
+    <img class="cover-img" src="{{cover_image}}" />
+    {% else %}
+    <div class="image-fallback"></div>
+    {% endif %}
+  </div>
+</div>
+<div class="bottom">
+  <h1 class="title">{{title}}</h1>
+  <div class="authors-vertical">
+    <div class="author-col">{{author_line_1}}</div>
+    {% if author_line_2 %}<div class="author-col">{{author_line_2}}</div>{% endif %}
+  </div>
+  <div class="bottom-row">
+    {% if subtitle %}<div class="subtitle">{{subtitle}}</div>{% else %}<div></div>{% endif %}
+    <div class="series">{{series_label}}</div>
+  </div>
+</div>
+<script>
+document.fonts.ready.then(function(){
+  var t = document.querySelector('.title');
+  if (t) {
+    var maxH = parseInt(getComputedStyle(t).maxHeight);
+    t.style.maxHeight = 'none';
+    var ls = parseFloat(getComputedStyle(t).letterSpacing) || 0;
+    while (t.offsetHeight > maxH && ls > 0) {
+      ls = Math.max(0, ls - 0.5);
+      t.style.letterSpacing = ls + 'px';
+    }
+    var fs = parseFloat(getComputedStyle(t).fontSize);
+    while (t.offsetHeight > maxH && fs > 24) {
+      fs -= 1;
+      t.style.fontSize = fs + 'px';
+    }
+    t.style.maxHeight = maxH + 'px';
+  }
+  document.querySelectorAll('.author-line, .series, .subtitle').forEach(function(el){
+    var ls = parseFloat(getComputedStyle(el).letterSpacing) || 0;
+    while(el.scrollWidth > el.clientWidth && ls > 0){
+      ls = Math.max(0, ls - 0.5);
+      el.style.letterSpacing = ls + 'px';
+    }
+    var fs = parseFloat(getComputedStyle(el).fontSize);
+    while(el.scrollWidth > el.clientWidth && fs > 6){
+      fs -= 0.5;
+      el.style.fontSize = fs + 'px';
+    }
+  });
+  var cols = Array.from(document.querySelectorAll('.author-col'));
+  if (cols.length > 0) {
+    var MAX_COL_H = 128;
+    function colMax() {
+      return cols.reduce(function(h, el){ return Math.max(h, el.scrollHeight); }, 0);
+    }
+    var ls = parseFloat(getComputedStyle(cols[0]).letterSpacing) || 0;
+    while (colMax() > MAX_COL_H && ls > 0) {
+      ls = Math.max(0, ls - 0.5);
+      cols.forEach(function(el){ el.style.letterSpacing = ls + 'px'; });
+    }
+    var fs = parseFloat(getComputedStyle(cols[0]).fontSize);
+    while (colMax() > MAX_COL_H && fs > 7) {
+      fs -= 0.5;
+      cols.forEach(function(el){ el.style.fontSize = fs + 'px'; });
+    }
+  }
+
+  document.querySelectorAll('body *').forEach(function(el){
+    if(el.childElementCount > 0) return;
+    if(el.classList.contains('author-col')) return;
+    var ls = parseFloat(getComputedStyle(el).letterSpacing);
+    if(!(ls > 0)) return;
+    var n = (el.textContent || '').trim().length;
+    if(n > 1) el.style.letterSpacing = (ls * (n - 1) / n) + 'px';
+    else el.style.letterSpacing = '0px';
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;700&display=swap');
+body {
+  --safe-top: 62px;
+  --safe-right: 62px;
+  --safe-bottom: 62px;
+  --safe-left: 72px;
+  margin: 0; padding: 0; width: 528px; height: 741px;
+  background: #8DB55A;
+  font-family: 'Noto Serif SC', serif;
+  position: relative; overflow: hidden;
+}
+.content {
+  position: relative; z-index: 2;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  height: 100%; box-sizing: border-box;
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  overflow: hidden;
+}
+.title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 60px; font-weight: 900; color: #2B5E85;
+  line-height: 1.2; letter-spacing: 0;
+  transform: scaleY(1.2); transform-origin: top center;
+  margin: 0 0 16px 0;
+  width: 100%;
+  text-align: center;
+  text-align-last: center;
+}
+.author-row {
+  display: flex; justify-content: space-between; align-items: center;
+  width: 100%; margin-top: 16px; margin-bottom: 4px; flex-shrink: 0;
+}
+.author-line {
+  font-size: 13px; color: #2B5E85;
+  letter-spacing: 2px; line-height: 1.4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.circle-wrap {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+.circle {
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255,255,255,0.08);
+  flex-shrink: 0;
+  position: relative;
+}
+.circle-img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.circle-fallback {
+  width: 100%; height: 100%;
+  background: rgba(255,255,255,0.06);
+}
+.dot-sub-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 20px;
+  width: 100%;
+  justify-content: center;
+}
+.dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #2B5E85;
+  flex-shrink: 0;
+}
+.subtitle {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px; font-weight: 700;
+  color: #2B5E85;
+  letter-spacing: 0;
+  margin: 0;
+  white-space: nowrap;
+  transform: scaleY(1.2);
+}
+.series {
+  font-size: 13px; color: rgba(43,94,133,0.55);
+  letter-spacing: 3px; flex-shrink: 0;
+  margin-top: 16px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 100%;
+}
+</style>
+</head>
+<body>
+<div class="content">
+  <h1 class="title">{{title}}</h1>
+  <div class="author-row"{% if not author_line_2 %} style="justify-content:center"{% endif %}>
+    <div class="author-line">{{author_line_1}}</div>
+    {% if author_line_2 %}<div class="author-line">{{author_line_2}}</div>{% endif %}
+  </div>
+  <div class="circle-wrap">
+    <div class="circle">
+      {% if cover_image %}
+      <img class="circle-img" src="{{cover_image}}" />
+      {% else %}
+      <div class="circle-fallback"></div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="dot-sub-row">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    {% if subtitle %}<div class="subtitle">{{subtitle}}</div>{% endif %}
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+  <div class="series">{{series_label}}</div>
+</div>
+<script>
+document.fonts.ready.then(function(){
+  var ctx = document.createElement('canvas').getContext('2d');
+  var W = 528 - 72 - 62;
+
+  function mW(txt, fw, fs, ff) {
+    ctx.font = fw + ' ' + fs + 'px ' + ff;
+    return ctx.measureText(txt).width;
+  }
+  function latR(s) {
+    var n = 0;
+    for (var i = 0; i < s.length; i++) if (s.charCodeAt(i) < 256) n++;
+    return n / (s.length || 1);
+  }
+  function wantCenter(s) { return s.length <= 3 || latR(s) > 0.5; }
+
+  /* ── Title ── */
+  var t = document.querySelector('.title');
+  if (t) {
+    var text = t.textContent.trim();
+    var cs = getComputedStyle(t), fw = cs.fontWeight, ff = cs.fontFamily;
+    var fs = parseFloat(cs.fontSize);
+    var MAX_H = 145;
+    var tw = mW(text, fw, fs, ff);
+
+    if (tw <= W) {
+      /* --- single line --- */
+      t.style.textAlign = 'center';
+      t.style.textAlignLast = 'center';
+      if (text.length > 1 && latR(text) <= 0.5) {
+        var sp = (W - tw) / text.length;
+        if (text.length > 6) sp = Math.min(sp, fs * 0.5);
+        t.style.letterSpacing = sp + 'px';
+        t.style.textIndent = (sp / 2) + 'px';
+        t.style.whiteSpace = 'nowrap';
+      }
+    } else {
+      /* --- need 2 lines: find optimal break --- */
+      var tgt = tw / 2;
+      var best = Math.floor(text.length / 2), bD = 1e9;
+      var hasSpace = text.indexOf(' ') !== -1;
+
+      for (var i = 2; i <= text.length - 2; i++) {
+        if (hasSpace && text[i] !== ' ' && text[i - 1] !== ' ') continue;
+        var pw = mW(text.substring(0, i).trimEnd(), fw, fs, ff);
+        var d = Math.abs(pw - tgt);
+        if (i > 0 && i < text.length) {
+          var a = text.charCodeAt(i - 1) < 256, b = text.charCodeAt(i) < 256;
+          if (a !== b) d *= 0.8;
+        }
+        if (d < bD) { bD = d; best = i; }
+      }
+      if (hasSpace && text[best] === ' ') best++;
+
+      var l1 = text.substring(0, best).trim();
+      var l2 = text.substring(best).trim();
+
+      while (fs > 28) {
+        var w1 = mW(l1, fw, fs, ff), w2 = mW(l2, fw, fs, ff);
+        if (w1 <= W && w2 <= W && fs * 1.2 * 2 <= MAX_H) break;
+        fs -= 1;
+      }
+      t.style.fontSize = fs + 'px';
+
+      t.innerHTML = '<span class="tl" style="display:block;white-space:nowrap">' + l1 + '</span>' +
+                    '<span class="tl" style="display:block;white-space:nowrap">' + l2 + '</span>';
+
+      t.querySelectorAll('.tl').forEach(function(el) {
+        var txt = el.textContent.trim();
+        el.style.textAlign = 'center';
+        el.style.textAlignLast = 'center';
+        if (txt.length > 1 && latR(txt) <= 0.5) {
+          var nw = mW(txt, fw, fs, ff);
+          if (nw < W) {
+            var sp = (W - nw) / txt.length;
+            if (txt.length > 6) sp = Math.min(sp, fs * 0.5);
+            el.style.letterSpacing = sp + 'px';
+            el.style.textIndent = (sp / 2) + 'px';
+          }
+        }
+      });
+    }
+
+    var th = t.offsetHeight;
+    t.style.marginBottom = Math.max(16, Math.ceil(th * 0.22)) + 'px';
+  }
+
+  /* ── Subtitle ── */
+  function fitW(el, tw, mn, mx) {
+    var txt = el.textContent.trim();
+    if (!txt) return;
+    var s = getComputedStyle(el), fs = parseFloat(s.fontSize);
+    ctx.font = s.fontWeight + ' ' + fs + 'px ' + s.fontFamily;
+    var nw = ctx.measureText(txt).width;
+    if (nw > tw) {
+      el.style.letterSpacing = '0px';
+      while (nw > tw && fs > mn) {
+        fs -= 0.5; el.style.fontSize = fs + 'px';
+        ctx.font = s.fontWeight + ' ' + fs + 'px ' + s.fontFamily;
+        nw = ctx.measureText(txt).width;
+      }
+    }
+    ctx.font = s.fontWeight + ' ' + fs + 'px ' + s.fontFamily;
+    nw = ctx.measureText(txt).width;
+    if (txt.length > 1 && nw < tw) {
+      var sp = (tw - nw) / (txt.length - 1);
+      el.style.letterSpacing = Math.min(sp, mx) + 'px';
+    }
+  }
+
+  var sub = document.querySelector('.subtitle');
+  var dotRow = document.querySelector('.dot-sub-row');
+  if (sub && dotRow) {
+    var dots = dotRow.querySelectorAll('.dot'), dw = 0;
+    dots.forEach(function(d) { dw += d.offsetWidth; });
+    var gaps = (dots.length + 1) * 8;
+    var subTarget = W - dw - gaps;
+    var subFs = parseFloat(getComputedStyle(sub).fontSize);
+    fitW(sub, subTarget, 9, subFs * 0.35);
+    dotRow.style.width = W + 'px';
+    dotRow.style.justifyContent = 'space-between';
+  }
+
+  /* ── Author lines ── */
+  document.querySelectorAll('.author-line').forEach(function(el) {
+    var s = getComputedStyle(el), fs = parseFloat(s.fontSize);
+    var ls = parseFloat(s.letterSpacing) || 0;
+    while (el.scrollWidth > el.clientWidth && ls > 0) {
+      ls = Math.max(0, ls - 0.5); el.style.letterSpacing = ls + 'px';
+    }
+    while (el.scrollWidth > el.clientWidth && fs > 8) {
+      fs -= 0.5; el.style.fontSize = fs + 'px';
+    }
+  });
+
+  /* ── Series ── */
+  var series = document.querySelector('.series');
+  if (series) { fitW(series, W, 8, 4); series.style.textAlign = 'center'; }
+
+  /* ── Letter-spacing compensation (skip title) ── */
+  document.querySelectorAll('body *').forEach(function(el) {
+    if (el.childElementCount > 0) return;
+    if (el.closest('.title')) return;
+    var ls = parseFloat(getComputedStyle(el).letterSpacing);
+    if (!(ls > 0)) return;
+    var n = (el.textContent || '').trim().length;
+    if (n > 1) {
+      var adj = ls * (n - 1) / n;
+      el.style.letterSpacing = adj + 'px';
+      var p = el.parentElement;
+      if (p && /flex/.test(getComputedStyle(p).display)) el.style.marginRight = (-adj) + 'px';
+    } else {
+      el.style.letterSpacing = '0px';
+    }
+  });
+});
+</script>
+</body>
+</html>
