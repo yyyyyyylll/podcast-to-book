@@ -19,6 +19,7 @@ ENV/
 node_modules/
 frontend/dist/
 frontend/.vite/
+frontend/tsconfig.tsbuildinfo
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
@@ -47,4 +48,3 @@ Thumbs.db
 *.log
 logs/
 .cache/
-

@@ -2,6 +2,15 @@
 
 把播客变成一本可印刷的书。支持两种工作流：
 
+<p>
+  <img src="docs/screenshots/landing-hero.png" alt="podcast-to-book landing page" width="100%">
+</p>
+
+<p>
+  <img src="docs/screenshots/create-page.png" alt="Create a podcast book" width="49%">
+  <img src="docs/screenshots/sample-pdf-page.png" alt="Generated book PDF sample" width="32%">
+</p>
+
 - **单期播客 → 书**：上传一条小宇宙 / Apple Podcasts 链接，自动转录、整理、排版，导出 PDF / EPUB / DOCX
 - **多期播客 → 书**：把同一档播客的多期合并成一整本书（CLI 工作台，给运营/编辑使用）
 
